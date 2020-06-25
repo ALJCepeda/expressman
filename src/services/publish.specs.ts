@@ -26,8 +26,6 @@ describe('publish', function() {
 
     publish(app);
     const result = await request(app).get('/return-as-response');
-
-    debugger;
     expect(result.body.message).to.equal('Victory!');
   });
 
