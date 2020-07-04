@@ -1,5 +1,4 @@
 import Manifest from "../services/Manifest";
-import {RouteHandlerConstructor} from "../models/IRouteHandler";
 import {injectable} from "tsyringe";
 
 export function Route(method:string, path:string) {
@@ -7,4 +6,24 @@ export function Route(method:string, path:string) {
     injectable()(target);
     Manifest.recordRoute(target, method, path);
   }
+}
+
+export function GET(path:string) {
+  return Route('get', path);
+}
+
+export function POST(path:string) {
+  return Route('post', path);
+}
+
+export function PUT(path:string) {
+  return Route('put', path);
+}
+
+export function PATCH(path:string) {
+  return Route('patch', path);
+}
+
+export function DELETE(path:string) {
+  return Route('delete', path);
 }

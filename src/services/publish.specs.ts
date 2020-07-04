@@ -4,7 +4,8 @@ import { expect } from 'chai';
 import {inject} from 'tsyringe';
 import {Route} from "../decorators";
 import {Response} from "express";
-import tokens from "../tokens";
+import {tokens} from "../tokens";
+import {publish} from "./publish";
 import Manifest from "./Manifest";
 
 describe('publish', function() {
@@ -25,6 +26,7 @@ describe('publish', function() {
 
     Manifest.generateRoutes(app);
     const result = await request(app).get('/return-as-response');
+
     expect(result.body.message).to.equal('Victory!');
   });
 
@@ -79,7 +81,7 @@ describe('publish', function() {
         throw new Error('Oh no!');
       }
 
-      catch(err: Error): IHTTPResponse<string>{
+      catch(): IHTTPResponse<string>{
         return {
           statusCode:500,
           contentType:'text/plain',
