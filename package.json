@@ -1,12 +1,12 @@
 {
   "name": "expressman",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "Yet another wrapper around Express",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "ts-mocha -r reflect-metadata src/**/*.specs.ts",
-    "dev": "ts-node-dev example/index.ts",
+    "test": "ts-mocha -r reflect-metadata src/**/**/*.specs.ts",
+    "playground": "ts-node-dev example/playground.ts",
     "build": "tsc",
     "prepare": "npm run build",
     "prepublishOnly": "npm test"
@@ -15,7 +15,9 @@
   "license": "ISC",
   "dependencies": {
     "glob": "^7.1.6",
+    "lodash": "^4.17.19",
     "lodash.flatten": "^4.4.0",
+    "ts-morph": "^7.1.1",
     "tsyringe": "^4.3.0"
   },
   "devDependencies": {
@@ -27,11 +29,13 @@
     "chai": "^4.2.0",
     "express": "^4.17.1",
     "mocha": "^7.2.0",
-    "reflect-metadata": "^0.1.13",
     "supertest": "^4.0.2",
+    "reflect-metadata": "^0.1.13",
     "ts-mocha": "^7.0.0",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.9.3"
+    "tsyringe": "^4.3.0",
+    "typescript": "^3.9.3",
+    "typescript-json-schema": "^0.42.0"
   }
 }
