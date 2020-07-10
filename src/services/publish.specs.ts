@@ -7,6 +7,7 @@ import {Response} from "express";
 import {tokens} from "../tokens";
 import {publish} from "./publish";
 import Manifest from "./Manifest";
+import {IHTTPResponse, IRouteHandler} from "../types";
 
 describe('publish', function() {
   this.timeout(0);
