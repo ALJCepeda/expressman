@@ -1,6 +1,5 @@
 import {Application, Request, RequestHandler, Response} from "express";
 import ContainerMiddleware from "../middleware/ContainerMiddleware";
-import {RouteHandlerConstructor} from "../models/IRouteHandler";
 import {allMiddlewareFromHandler} from "./allMiddlewareFromHandler";
 import {SendResponseMiddleware} from "../middleware/SendResponseMiddleware";
 import DependencyContainer from "tsyringe/dist/typings/types/dependency-container";
@@ -23,7 +22,7 @@ class Manifest {
   before: Map<RouteHandlerConstructor, RouteHandlerConstructor[]> = new Map();
   after: Map<RouteHandlerConstructor, RouteHandlerConstructor[]> = new Map();
 
-  recordHTTP(target:RouteHandlerConstructor, method:string, path:string) {
+  recordRoute(target:RouteHandlerConstructor, method:string, path:string) {
     this.route.set(`${method} ${path}`, {
       method,
       path,

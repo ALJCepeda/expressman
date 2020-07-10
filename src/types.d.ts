@@ -18,3 +18,12 @@ interface IHTTPResponse<U> {
   contentType?: string;
   body: U;
 }
+
+interface RouteHandlerConstructor {
+  new (...args: any[]): IRouteHandler
+}
+
+interface IRouteHandler {
+  catch?(err:Error): any;
+  handle(payload:any): any;
+}
