@@ -14,6 +14,9 @@ export function publish<U>(app:Application, options:PublishOptions) {
       if(err) reject(err);
       files.forEach(file => require(file));
       Manifest.generateRoutes(app, options);
+      resolve({
+        app, files
+      });
     });
   });
 }
