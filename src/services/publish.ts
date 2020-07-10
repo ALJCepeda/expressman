@@ -1,5 +1,5 @@
 import {Application, Request, Response} from "express";
-import glob from "glob";
+import glob = require("glob");
 import Manifest from "./Manifest";
 import DependencyContainer from "tsyringe/dist/typings/types/dependency-container";
 
