@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {JSONFromType} from "./JSONFromType";
-import project from "../../tests/TestProject";
+import project from "../../unit-test-resources/TestProject";
 
 describe('JSONFromType', function() {
   this.timeout(0);

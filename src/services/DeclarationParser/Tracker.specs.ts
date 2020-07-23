@@ -1,7 +1,7 @@
 import {resolve} from "path";
 import {expect} from "chai";
 import {JSONFromType} from "./JSONFromType";
-import project from "../../tests/TestProject";
+import project from "../../unit-test-resources/TestProject";
 import {Tracker} from "./Tracker";
 
 describe('Tracker', function() {

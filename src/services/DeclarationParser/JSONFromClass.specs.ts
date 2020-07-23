@@ -1,4 +1,4 @@
-import project from "../../tests/TestProject";
+import project from "../../unit-test-resources/TestProject";
 import {expect} from "chai";
 import {definitionFromClass} from "./definitionFromClass";
 
