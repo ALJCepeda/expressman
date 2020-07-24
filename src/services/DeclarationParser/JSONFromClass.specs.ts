@@ -6,7 +6,7 @@ describe('JSONFromClass', function() {
   this.timeout(0);
 
   it('should create definition of InlineDefinition', function() {
-    const sourceFile = project.getSourceFile('src/tests/DeclarationParser/JSONFromClass/InlineDefinition.ts')!;
+    const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/JSONFromClass/InlineDefinition.ts')!;
     const classDef = sourceFile.getClass('InlineDefinition')!;
 
     const result = definitionFromClass(classDef);
@@ -28,7 +28,7 @@ describe('JSONFromClass', function() {
   });
 
   it('should json a RouterHandler class', function() {
-    const sourceFile = project.getSourceFile('src/tests/DeclarationParser/JSONFromClass/InterfaceDefinition.ts')!;
+    const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/JSONFromClass/InterfaceDefinition.ts')!;
     const classDef = sourceFile.getClass('InterfaceDefinition')!;
 
     const result = definitionFromClass(classDef);
@@ -50,7 +50,7 @@ describe('JSONFromClass', function() {
   });
 
   it('should json a RouterHandler class', function() {
-    const sourceFile = project.getSourceFile('src/tests/DeclarationParser/JSONFromClass/InlineDefinition.ts')!;
+    const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/JSONFromClass/InlineDefinition.ts')!;
     const classDef = sourceFile.getClass('InlineDefinition')!;
 
     const result = definitionFromClass(classDef);

@@ -1,4 +1,3 @@
-import {resolve} from "path";
 import {expect} from "chai";
 import {JSONFromType} from "./JSONFromType";
 import project from "../../unit-test-resources/TestProject";
@@ -13,7 +12,7 @@ describe('Tracker', function() {
   });
 
   it('should track references', function() {
-    const sourceFile = project.getSourceFile('src/tests/DeclarationParser/JSONFromType/InterfaceWithNestedInterface.ts')!;
+    const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/JSONFromType/InterfaceWithNestedInterface.ts')!;
     const interfaceDef = sourceFile.getInterfaces()[1];
 
     const interfaceJSON = JSONFromType(interfaceDef.getType(), tracker);
@@ -29,7 +28,7 @@ describe('Tracker', function() {
   });
 
   it.skip('should track generic references', function() {
-    const sourceFile = project.getSourceFile('src/tests/DeclarationParser/JSONFromType/InterfaceWithGenericInterface.ts')!;
+    const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/JSONFromType/InterfaceWithGenericInterface.ts')!;
     const interfaceDef = sourceFile.getInterface('InterfaceWithGenericInterface')!;
     const interfaceJSON = JSONFromType(interfaceDef.getType(), tracker);
 
@@ -38,7 +37,7 @@ describe('Tracker', function() {
   });
 
   it('should json an interface with a nested imported interface declaration', function() {
-    const sourceFile = project.getSourceFile('src/tests/DeclarationParser/Tracker/InterfaceWIthNestedImportedInterface.ts')!;
+    const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/Tracker/InterfaceWIthNestedImportedInterface.ts')!;
     const interfaceDef = sourceFile.getInterface('InterfaceWithNestedImportedInterface')!;
     const interfaceJSON = JSONFromType(interfaceDef.getType(), tracker);
 
