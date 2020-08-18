@@ -58,7 +58,7 @@ describe('JSONFromType', function() {
     });
   });
 
-  it('should json an interface with a nested imported interface declaration', function() {
+  it.skip('should json an interface with a nested imported interface declaration', function() {
     const sourceFile = project.getSourceFile('src/unit-test-resources/DeclarationParser/Tracker/InterfaceWIthNestedImportedInterface.ts')!;
     const interfaceDef = sourceFile.getInterface('InterfaceWithNestedImportedInterface')!;
     const interfaceJSON = JSONFromType(interfaceDef.getType());
