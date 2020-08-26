@@ -8,20 +8,21 @@ interface PublishOptions {
   prehandle?(container:DependencyContainer, request:Request, response:Response);
 }
 
-export function publish<U>(app:Application, options:PublishOptions) {
+interface PublishResult {
+  app:Application,
+  files:string[]
+}
+
+export function publish<U>(app:Application, options:PublishOptions): Promise<PublishResult> {
   return new Promise((resolve, reject) => {
     glob(`${process.cwd()}/${options.routeDir}/**/*.ts`, (err, files) => {
       if(err) reject(err);
-      try {
-        files.forEach(file => require(file));
-        Manifest.generateRoutes(app, options);
-        resolve({
-          app, files
-        });
-      } catch(err) {
-        debugger;
-      }
 
+      files.forEach(file => require(file));
+      Manifest.generateRoutes(app, options);
+      resolve({
+        app, files
+      });
     });
   });
 }
