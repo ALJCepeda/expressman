@@ -1,6 +1,6 @@
 import {Application, Request, Response} from "express";
 import glob = require("glob");
-import Manifest from "./RouteMetadata";
+import RouteMetadata from "./RouteMetadata";
 import DependencyContainer from "tsyringe/dist/typings/types/dependency-container";
 import {Middleware} from "../types";
 
@@ -18,7 +18,7 @@ export function publish<U>(app:Application, options:PublishOptions) {
       if(err) reject(err);
 
       files.forEach(file => require(file));
-      Manifest.generateRoutes(app, options);
+      RouteMetadata.generateRoutes(app, options);
       resolve({
         app, files
       });
