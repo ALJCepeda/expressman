@@ -1,9 +1,9 @@
 import {Request, Response, NextFunction} from "express";
 import {tokens} from "../tokens";
 import {container} from "tsyringe";
-import {ManifestOptions} from "../services/Manifest";
+import {ManifestOptions} from "../services/metadata/RouteMetadata";
 
-export default function ContainerMiddleware(options:ManifestOptions = {}) {
+export default function ContainerMiddleware(options:ManifestOptions) {
   return (req: Request, resp: Response, next: NextFunction) => {
     const child = container.createChildContainer();
 
@@ -13,11 +13,10 @@ export default function ContainerMiddleware(options:ManifestOptions = {}) {
 
     resp.locals.container = child;
 
-    if(options.prehandle) {
-      options.prehandle(child, req, resp);
+    if(options.configureContainer) {
+      options.configureContainer(child, req, resp);
     }
 
-    next();
-    return child;
+    return next();
   };
 }

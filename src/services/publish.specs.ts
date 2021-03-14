@@ -2,39 +2,42 @@ import request = require('supertest');
 import express = require('express');
 import { expect } from 'chai';
 import {inject} from 'tsyringe';
-import {Route} from "../decorators";
+import {API, Route} from "../decorators";
 import {Response} from "express";
 import {tokens} from "../tokens";
 import {publish} from "./publish";
-import Manifest from "./Manifest";
-import {IHTTPResponse, IRouteHandler} from "../types";
+import RouteMetadata from "./metadata/RouteMetadata";
+import {programFor} from "./generateSwagger";
 
 describe('publish', function() {
   this.timeout(0);
-  let app;
-
-  beforeEach(function() {
-    app = express();
-  });
 
   it('should use the result of the handler as the content of the response', async function() {
-    @Route('GET', '/return-as-response')
-    class CUT {
-      handle() {
+    @API('/')
+    class ResultAsResponse {
+      @Route('GET', '/return-as-response')
+      returnAsResponse() {
         return { message:'Victory!' };
       }
     }
-
-    Manifest.generateRoutes(app);
+  
+    const app = express();
+    const program = await programFor('**/*.specs.ts')
+    await RouteMetadata.generateRoutes(app, program, {pattern: "**/*.specs.ts"});
     const result = await request(app).get('/return-as-response');
 
     expect(result.body.message).to.equal('Victory!');
   });
 
   it('should use HTTPResponse class for more precise control over response', async function() {
-    @Route('GET', '/http-response-response')
-    class CUT {
-      handle() {
+    @API('/')
+    class HTTPResponse {
+      constructor(
+        @inject(tokens.Response) private response:Response
+      ) {}
+      
+      @Route('GET', '/http-response-response')
+      httpResponse() {
         return {
           statusCode: 400,
           contentType:'text/plain',
@@ -42,8 +45,10 @@ describe('publish', function() {
         };
       }
     }
-
-    Manifest.generateRoutes(app);
+  
+    const app = express();
+    const program = await programFor('**/*.specs.ts')
+    await RouteMetadata.generateRoutes(app, program, {pattern: "**/*.specs.ts"});
     const result = await request(app).get('/http-response-response');
 
     expect(result.statusCode).to.equal(400);
@@ -52,18 +57,21 @@ describe('publish', function() {
   });
 
   it('should be able to use traditional request object for traditional handling', async function() {
-    @Route('GET', '/traditional-response')
-    class CUT {
+    @API('/')
+    class TraditionalResponse {
       constructor(
         @inject(tokens.Response) private response:Response
       ) {}
-
-      handle() {
+      
+      @Route('GET', '/traditional-response')
+      traditionalResponse() {
         this.response.status(400).contentType('text/plain').send('This is simple text');
       }
     }
-
-    Manifest.generateRoutes(app);
+  
+    const app = express();
+    const program = await programFor('**/*.specs.ts')
+    await RouteMetadata.generateRoutes(app, program, {pattern: "**/*.specs.ts"});
     const result = await request(app).get('/traditional-response');
 
     expect(result.statusCode).to.equal(400);
@@ -71,28 +79,21 @@ describe('publish', function() {
     expect(result.text).to.equal('This is simple text');
   });
 
-  it('should allow ability to handle error and return a response', async function() {
-    @Route('GET', '/traditional-response')
-    class CUT implements IRouteHandler {
-      constructor(
-        @inject(tokens.Response) private response:Response
-      ) {}
-
-      handle() {
+  it('should automatically publish unhandled errors as 500', async function() {
+    @API('/')
+    class UnexpectedError {
+      constructor() {}
+  
+      @Route('GET', '/unexpected-error')
+      unexpectedError() {
         throw new Error('Oh no!');
       }
-
-      catch(): IHTTPResponse<string>{
-        return {
-          statusCode:500,
-          contentType:'text/plain',
-          body:'Internal Server Error'
-        };
-      }
     }
-
-    Manifest.generateRoutes(app);
-    const result = await request(app).get('/traditional-response');
+  
+    const app = express();
+    const program = await programFor('**/*.specs.ts')
+    await RouteMetadata.generateRoutes(app, program, {pattern: "**/*.specs.ts"});
+    const result = await request(app).get('/unexpected-error');
 
     expect(result.statusCode).to.equal(500);
     expect(result.text).to.equal('Internal Server Error');
