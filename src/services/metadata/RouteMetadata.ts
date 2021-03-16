@@ -13,6 +13,7 @@ import {
 import {ErrorMiddleware} from "../../middleware/ErrorMiddleware";
 import * as TJS from "typescript-json-schema";
 import gatherSymbols, {FileSymbols} from "../../utils/gatherSymbols";
+import {APISchemaGenerator} from "../generateAPISchema";
 
 interface MetadataOptions {
   path?: string;
@@ -38,17 +39,16 @@ export class APIDescriptor {
   ) { }
 }
 
+export interface RouteSchemaArg {
+  name: string;
+  schema: any;
+}
+
 interface RouteSchema {
   method: string;
   path: string;
-  input?: {
-    name: string;
-    schema: any;
-  };
-  output?: {
-    name: string;
-    schema: any;
-  };
+  input?: RouteSchemaArg;
+  output?: RouteSchemaArg;
 }
 
 export class RouteDescriptor {
@@ -61,6 +61,7 @@ export class RouteDescriptor {
   public wrap:Wrapperware[] = [];
   
   constructor(
+    public target:AnyNewable,
     public property: string
   ) {
   }
@@ -86,7 +87,7 @@ class RouteMetadata {
     const apiDescriptor = this.get(target);
     
     if(!apiDescriptor.routes.has(property)) {
-      apiDescriptor.routes.set(property, new RouteDescriptor(property))
+      apiDescriptor.routes.set(property, new RouteDescriptor(target, property))
     }
     
     return apiDescriptor.routes.get(property)!;
@@ -146,8 +147,8 @@ class RouteMetadata {
         .forEach((middleware) => app.use(middleware));
     }
   
-    app.get(options.metadata?.path || '/expressman', (req: Request, resp: Response, next) => {
-      resp.send(this.toDTO());
+    app.get(options.metadata?.path || '/expressman', (req: Request, resp: Response) => {
+      resp.send(APISchemaGenerator.schemaFromMetadata());
     });
     
     app.use(SendResponseMiddleware);
@@ -155,7 +156,10 @@ class RouteMetadata {
   }
   
   async generateSchemas(program:TJS.Program) {
-    const generator = TJS.buildGenerator(program)!;
+    const generator = TJS.buildGenerator(program, {
+      required: true,
+      noExtraProps: true
+    })!;
     
     this.apis.forEach((api) => {
       api.routes.forEach((route) => {

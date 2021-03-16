@@ -15,7 +15,7 @@ describe('publish', function() {
   it('should use the result of the handler as the content of the response', async function() {
     @API('/')
     class ResultAsResponse {
-      @Route('GET', '/return-as-response')
+      @Route('get', '/return-as-response')
       returnAsResponse() {
         return { message:'Victory!' };
       }
@@ -36,7 +36,7 @@ describe('publish', function() {
         @inject(tokens.Response) private response:Response
       ) {}
       
-      @Route('GET', '/http-response-response')
+      @Route('get', '/http-response-response')
       httpResponse() {
         return {
           statusCode: 400,
@@ -63,7 +63,7 @@ describe('publish', function() {
         @inject(tokens.Response) private response:Response
       ) {}
       
-      @Route('GET', '/traditional-response')
+      @Route('get', '/traditional-response')
       traditionalResponse() {
         this.response.status(400).contentType('text/plain').send('This is simple text');
       }
@@ -84,7 +84,7 @@ describe('publish', function() {
     class UnexpectedError {
       constructor() {}
   
-      @Route('GET', '/unexpected-error')
+      @Route('get', '/unexpected-error')
       unexpectedError() {
         throw new Error('Oh no!');
       }

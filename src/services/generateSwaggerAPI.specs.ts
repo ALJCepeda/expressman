@@ -21,7 +21,7 @@ describe("generateSwaggerAPI", function() {
     class GenerateSwaggerAPI {
       constructor() {}
     
-      @Route('GET', '/json-response')
+      @Route('get', '/json-response')
       getJSONResponse(payload: CUTInput): CUTOutput {
         return { member: true };
       }

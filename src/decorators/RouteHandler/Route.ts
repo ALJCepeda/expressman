@@ -3,6 +3,8 @@ import RouteMetadata from "../../services/metadata/RouteMetadata";
 import {AnyNewable} from "../../types";
 import callsites from "callsites";
 
+export type HTTPMethods = 'get' | 'post' | 'put' | 'patch' | 'delete';
+
 export function API(basePath:string) {
   const filePath = callsites()[1].getFileName();
   
@@ -18,7 +20,7 @@ export function API(basePath:string) {
   }
 }
 
-export function Route(method:string, path?:string) {
+export function Route(method:HTTPMethods, path?:string) {
   return (target:any, property:string) => {
     const paramTypes = Reflect.getMetadata("design:paramtypes", target, property);
     const returnType = Reflect.getMetadata("design:returntype", target, property);

@@ -34,7 +34,7 @@ export interface IRouteHandler<IPayload, IResponse> {
 
 export interface PropertyMapOptions<InputType = string>{
   path:string[];
-  options:MapOptions
+  options:MapOptions<InputType>
 }
 
 export type InputMap = {

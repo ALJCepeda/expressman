@@ -14,6 +14,7 @@ export async function payloadFromMap(descriptor:InputDescriptor, request:Request
     }
     
     let value = get(request, propDescriptor.path);
+    const label = propDescriptor.label || propertyKey;
     
     if(propDescriptor.default !== undefined) {
       if(value === undefined || value === null) {
@@ -24,11 +25,10 @@ export async function payloadFromMap(descriptor:InputDescriptor, request:Request
     if(propDescriptor.validate) {
       let validateTail:Promise<true | { reject:any }> = Promise.resolve(true);
   
-      propDescriptor.validate.forEach((rule) => {
+      propDescriptor.validate.forEach((validateRule) => {
         validateTail = validateTail.then(async (previousResult) => {
-          const validateRule = rule();
-          const label = validateRule.modifiers?.label || propertyKey;
-          const reject = validateRule.modifiers?.reject || validateRule.reject;
+          
+          const reject = validateRule.modifiers?.rejectWith || validateRule.rejectWith;
       
           if(previousResult === true) {
             if(typeof value === 'undefined' || value === null) {

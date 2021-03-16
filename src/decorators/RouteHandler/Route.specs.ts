@@ -6,7 +6,7 @@ describe('Route', function() {
   it('should define a get route as metadata', function() {
     @API('/')
     class GETRoute {
-      @Route('GET', '/')
+      @Route('get', '/')
       handle() {
 
       }
