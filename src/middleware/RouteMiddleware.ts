@@ -6,13 +6,14 @@ import {ValidationError} from "../models/errors/ValidationError";
 import DependencyContainer from "tsyringe/dist/typings/types/dependency-container";
 import InputMetadata from "../services/metadata/InputMetadata";
 
-async function getPayload(api:APIDescriptor, req:Request) {
-  const inputMetadata = InputMetadata.get(api.target);
+async function getPayload(api:APIDescriptor, route:RouteDescriptor, req:Request) {
+  const inputName = route.schema.input?.name;
   
-  if(!inputMetadata) {
+  if(!inputName) {
     return { payload:req.body, errors:[], valid: true };
   }
   
+  const inputMetadata = InputMetadata.byName.get(inputName)!;
   const {payload, errorPairs, valid} = await payloadFromMap(inputMetadata, req);
   const InputClass = inputMetadata.target;
   
@@ -32,7 +33,7 @@ export function RouteMiddleware(api:APIDescriptor, route: RouteDescriptor, onRes
   return async (req:Request, resp:Response, next:NextFunction) => {
     try {
       const container = resp.locals.container as DependencyContainer;
-      const { payload, error, valid } = await getPayload(api, req);
+      const { payload, error, valid } = await getPayload(api, route, req);
       resp.locals['$payload'] = payload;
       resp.locals['$validationError'] = error;
       resp.locals['$valid'] = valid;

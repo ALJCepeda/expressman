@@ -39,9 +39,11 @@ export async function payloadFromMap(descriptor:InputDescriptor, request:Request
               }
             }
         
-            const valid = await validateRule.valid(value);
-            if(!valid) {
-              return { reject:reject(value, label) };
+            if(validateRule.valid) {
+              const valid = await validateRule.valid(value);
+              if(!valid) {
+                return { reject:reject(value, label) };
+              }
             }
         
             return true;

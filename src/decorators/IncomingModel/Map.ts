@@ -11,7 +11,7 @@ export interface RuleModifiers<InputType> {
 
 export interface ValidationRule<InputType> {
   modifiers?: RuleModifiers<InputType>;
-  valid(input:InputType):boolean;
+  valid?(input:InputType):boolean;
   rejectWith(input:InputType, label?:string): string;
   schema: Definition;
 }
